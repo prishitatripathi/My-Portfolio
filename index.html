@@ -3,282 +3,710 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prishita Tripathi | Full Stack Developer</title>
+    <title>Prishita Tripathi | Systems Architect</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:ital,wght@1,900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        :root {
+            --cyan-glow: rgba(6, 182, 212, 0.4);
+        }
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #e2e8f0;
         }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        
         .glass-effect {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(30, 41, 59, 1);
+            transition: all 0.3s ease;
+        }
+        .glass-effect:hover {
+            border-color: rgba(6, 182, 212, 0.5);
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee 60s linear infinite;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) skewX(-15deg); }
+            100% { transform: translateX(200%) skewX(-15deg); }
+        }
+        .shimmer-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer-effect::after {
+            content: "";
+            position: absolute;
+            inset: -100%;
+            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.05), transparent);
+            transform: skewX(-15deg);
+            animation: shimmer 5s infinite;
+            pointer-events: none;
+        }
+
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            from, to { color: transparent }
+            50% { color: #22d3ee }
+        }
+
+        .modal-enter {
+            animation: modalIn 0.3s ease-out forwards;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-200">
+<body class="selection:bg-cyan-500/30 selection:text-cyan-200">
 
-    <!-- Header & Navigation -->
-    <header class="bg-gray-900/80 backdrop-blur-lg sticky top-0 z-50">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-white">Prishita Tripathi</a>
-            <div class="hidden md:flex space-x-6 items-center">
-                <a href="#about" class="hover:text-cyan-400 transition-colors">About</a>
-                <a href="#skills" class="hover:text-cyan-400 transition-colors">Skills</a>
-                <a href="#projects" class="hover:text-cyan-400 transition-colors">Projects</a>
-                <a href="#experience" class="hover:text-cyan-400 transition-colors">Experience</a>
-                <a href="#contact" class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-4 py-2 rounded-lg transition-colors">Contact</a>
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 py-6">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center gap-2 group cursor-pointer">
+                <div class="w-8 h-8 bg-cyan-500 rounded flex items-center justify-center text-slate-900 font-bold group-hover:rotate-12 transition-transform shadow-[0_0_15px_rgba(6,182,212,0.4)]">P</div>
+                <span class="font-bold text-xl tracking-tighter text-white uppercase tracking-widest">Tri<span class="text-cyan-500">pathi</span></span>
             </div>
-            <button id="mobile-menu-button" class="md:hidden">
-                <i data-lucide="menu"></i>
-            </button>
-        </nav>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
-            <a href="#about" class="block py-2 hover:text-cyan-400 transition-colors">About</a>
-            <a href="#skills" class="block py-2 hover:text-cyan-400 transition-colors">Skills</a>
-            <a href="#projects" class="block py-2 hover:text-cyan-400 transition-colors">Projects</a>
-            <a href="#experience" class="block py-2 hover:text-cyan-400 transition-colors">Experience</a>
-            <a href="#contact" class="block mt-2 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-4 py-2 rounded-lg transition-colors text-center">Contact</a>
+            <div class="hidden md:flex items-center gap-8 text-xs font-bold text-slate-400">
+                <a href="#expertise" class="hover:text-cyan-400 transition-colors uppercase tracking-widest">Expertise</a>
+                <a href="#projects" class="hover:text-cyan-400 transition-colors uppercase tracking-widest">Projects</a>
+                <a href="#credentials" class="hover:text-cyan-400 transition-colors uppercase tracking-widest">Credentials</a>
+                <a href="#experience" class="hover:text-cyan-400 transition-colors uppercase tracking-widest">Experience</a>
+                <a href="mailto:prishitatripathi@gmail.com" class="px-5 py-2 bg-white text-slate-900 rounded-full hover:bg-cyan-400 transition-all">CONTACT</a>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="container mx-auto px-6 py-12">
+    <!-- Hero Section -->
+    <section class="relative pt-40 pb-24 px-6 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-cyan-500/5 blur-[120px] rounded-full pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto relative">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="flex-1 space-y-10 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.2em] uppercase">
+                        <i data-lucide="sparkles" class="w-3 h-3"></i> Available for Internships 2026
+                    </div>
+                    
+                    <h1 class="text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter uppercase">
+                        Systems <br />
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 tracking-[0.05em]">Architect</span> <br />
+                        Engineered.
+                    </h1>
 
-        <!-- Hero Section -->
-        <section id="home" class="text-center py-20">
-            <img src="https://placehold.co/128x128/000000/FFFFFF?text=PT" alt="Prishita Tripathi" class="w-32 h-32 mx-auto rounded-full mb-6 border-4 border-cyan-500 shadow-lg">
-            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">Prishita Tripathi</h1>
-            <p class="text-xl md:text-2xl text-cyan-400 font-semibold mb-6">Full Stack Developer | Aspiring Data Scientist</p>
-            <p class="max-w-3xl mx-auto text-gray-300 mb-8">
-                Innovative Computer Science student with a 9.42 CGPA, passionate about building scalable, data-driven solutions with the goal of pursuing a Master's in Data Science.
+                    <div class="max-w-xl mx-auto lg:mx-0">
+                        <p class="text-xl text-slate-400 leading-relaxed font-medium">
+                            Bridging <span class="text-white italic font-serif">full-stack infrastructure</span> and <span class="text-white italic font-serif">predictive data science</span>. Currently maintaining a **9.42 CGPA** at SRMIST.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+                        <a href="#projects" class="group flex items-center gap-2 px-8 py-4 bg-cyan-500 text-slate-900 font-bold rounded-2xl hover:bg-cyan-400 transition-all">
+                            CASE STUDIES <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+                        </a>
+                        <div class="flex items-center gap-6 px-6 border-l border-slate-800 ml-4">
+                            <a href="https://github.com/prishitatripathi/" target="_blank" class="text-slate-500 hover:text-white transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
+                            <a href="https://www.linkedin.com/in/prishita-tripathi-30a888350/" target="_blank" class="text-slate-500 hover:text-white transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Terminal -->
+                <div class="hidden lg:block w-1/3">
+                    <div class="glass-effect rounded-[2rem] p-8 font-mono text-sm relative overflow-hidden group shadow-2xl shadow-cyan-500/10 border-slate-700/50">
+                        <div class="flex gap-2 mb-6">
+                            <div class="w-3 h-3 rounded-full bg-red-500/40"></div>
+                            <div class="w-3 h-3 rounded-full bg-amber-500/40"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500/40"></div>
+                        </div>
+                        <div class="space-y-3">
+                            <p class="text-cyan-400 font-bold"><span id="terminal-text"></span><span class="cursor-blink">_</span></p>
+                            <p class="text-slate-500 text-xs tracking-wider">Loading profile data...</p>
+                            <div class="space-y-1.5 py-4 border-y border-slate-800/50">
+                                <p class="text-slate-300">Name: <span class="text-white font-bold">Prishita Tripathi</span></p>
+                                <p class="text-slate-300">Role: <span class="text-white font-bold">Systems Engineer</span></p>
+                                <p class="text-slate-300">GPA: <span class="text-cyan-400 font-black">9.42/10.0</span></p>
+                                <p class="text-slate-300">Auth: <span class="text-green-400 font-bold">Verified Intern</span></p>
+                            </div>
+                            <p class="text-[10px] text-slate-600 italic font-bold uppercase tracking-[0.2em] pt-2">// mission_critical_code</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee Ribbon -->
+    <div class="bg-slate-900/50 border-y border-slate-800 py-10 overflow-hidden relative group">
+        <div class="animate-marquee">
+            <div id="marquee-content" class="flex gap-12 whitespace-nowrap px-6 text-slate-400 font-bold uppercase tracking-widest text-xs italic">
+                <!-- Content will be duplicated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Expertise Section -->
+    <section id="expertise" class="py-24 px-6 bg-slate-900/10">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16 text-center lg:text-left">
+                <h2 class="text-sm font-bold tracking-[0.4em] text-cyan-500 uppercase mb-4 flex items-center justify-center lg:justify-start gap-2">
+                    <i data-lucide="zap" class="w-3 h-3"></i> Technical Arsenal
+                </h2>
+                <h3 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tight">The Core Stack.</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Skill Card 1 -->
+                <div class="glass-effect rounded-3xl p-10 relative group overflow-hidden">
+                    <div class="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <i data-lucide="code-2" class="w-24 h-24"></i>
+                    </div>
+                    <h4 class="text-xl font-black text-white mb-8 flex items-center gap-3 uppercase tracking-tighter">
+                        <div class="w-2 h-6 bg-cyan-500 rounded-full"></div> Engineering
+                    </h4>
+                    <div class="flex flex-wrap gap-2.5">
+                        <span class="skill-tag">Data Structures</span>
+                        <span class="skill-tag">System Design</span>
+                        <span class="skill-tag">Distributed Systems</span>
+                        <span class="skill-tag">RESTful APIs</span>
+                    </div>
+                </div>
+                <!-- Skill Card 2 -->
+                <div class="glass-effect rounded-3xl p-10 relative group overflow-hidden">
+                    <div class="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <i data-lucide="database" class="w-24 h-24"></i>
+                    </div>
+                    <h4 class="text-xl font-black text-white mb-8 flex items-center gap-3 uppercase tracking-tighter">
+                        <div class="w-2 h-6 bg-cyan-500 rounded-full"></div> Intelligence
+                    </h4>
+                    <div class="flex flex-wrap gap-2.5">
+                        <span class="skill-tag">Predictive Modeling</span>
+                        <span class="skill-tag">NLP (SpaCy)</span>
+                        <span class="skill-tag">OpenCV</span>
+                        <span class="skill-tag">TensorFlow</span>
+                    </div>
+                </div>
+                <!-- Skill Card 3 -->
+                <div class="glass-effect rounded-3xl p-10 relative group overflow-hidden">
+                    <div class="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <i data-lucide="layers" class="w-24 h-24"></i>
+                    </div>
+                    <h4 class="text-xl font-black text-white mb-8 flex items-center gap-3 uppercase tracking-tighter">
+                        <div class="w-2 h-6 bg-cyan-500 rounded-full"></div> Stack
+                    </h4>
+                    <div class="flex flex-wrap gap-2.5">
+                        <span class="skill-tag">Python (FastAPI)</span>
+                        <span class="skill-tag">TypeScript</span>
+                        <span class="skill-tag">Next.js 15</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">Redis</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
+                <div class="text-center md:text-left">
+                    <h2 class="text-sm font-bold tracking-[0.4em] text-cyan-500 uppercase mb-4">Selected Works</h2>
+                    <h3 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tight">Engineering Impact.</h3>
+                </div>
+                <div class="flex bg-slate-900/50 p-1 rounded-2xl border border-slate-800">
+                    <button onclick="filterProjects('all')" class="filter-btn active">all</button>
+                    <button onclick="filterProjects('ai')" class="filter-btn">ai</button>
+                    <button onclick="filterProjects('fullstack')" class="filter-btn">fullstack</button>
+                </div>
+            </div>
+
+            <div id="project-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Projects will be rendered here by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Credentials Vault Section -->
+    <section id="credentials" class="py-24 px-6 bg-[#020617] relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/5 blur-[150px] rounded-full pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-16 text-center md:text-left">
+                <div>
+                    <h2 class="text-sm font-bold tracking-[0.4em] text-cyan-500 uppercase mb-4 flex items-center justify-center md:justify-start gap-2">
+                        <i data-lucide="shield-check" class="w-3 h-3"></i> Merit Infrastructure
+                    </h2>
+                    <h3 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tight">Digital Vault.</h3>
+                </div>
+            </div>
+
+            <div id="credential-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Credentials will be rendered here by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience & Merit Section -->
+    <section id="experience" class="py-24 px-6 bg-slate-900/10">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
+                <!-- Work -->
+                <div>
+                    <h3 class="text-3xl font-black text-white mb-12 flex items-center gap-4 uppercase tracking-tighter">
+                        <i data-lucide="briefcase" class="text-cyan-500 w-8 h-8"></i> Professional Log
+                    </h3>
+                    <div class="space-y-12">
+                        <div class="relative pl-10 border-l-2 border-slate-800">
+                            <div class="absolute top-0 -left-[9px] w-4 h-4 rounded-full bg-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.6)] border-4 border-[#020617]"></div>
+                            <p class="text-[10px] font-black text-cyan-500 uppercase tracking-[0.3em] mb-3">Oct 2024 — Nov 2024</p>
+                            <h4 class="text-xl font-black text-white uppercase tracking-tight">Full Stack Web Intern</h4>
+                            <p class="text-slate-400 font-black mb-6 italic text-sm tracking-wide uppercase opacity-70">Teachnook x Btech Walleh</p>
+                            <ul class="space-y-4 text-slate-400 text-sm font-bold uppercase tracking-wide opacity-80">
+                                <li class="flex gap-4"><i data-lucide="chevron-right" class="text-cyan-500 shrink-0 w-4 h-4"></i> Engineered UI components for 1K+ active users.</li>
+                                <li class="flex gap-4"><i data-lucide="chevron-right" class="text-cyan-500 shrink-0 w-4 h-4"></i> Optimized backend API pathways reducing latency by 30%.</li>
+                                <li class="flex gap-4"><i data-lucide="chevron-right" class="text-cyan-500 shrink-0 w-4 h-4"></i> Developed production-ready features using FastAPI/React.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic -->
+                <div>
+                    <h3 class="text-3xl font-black text-white mb-12 flex items-center gap-4 uppercase tracking-tighter">
+                        <i data-lucide="medal" class="text-cyan-500 w-8 h-8"></i> Academic Profile
+                    </h3>
+                    <div class="glass-effect rounded-[2rem] p-10 mb-8 border-slate-700/40 relative overflow-hidden group">
+                        <div class="absolute -right-8 -top-8 text-cyan-500 opacity-[0.03] rotate-12 group-hover:opacity-[0.05] transition-opacity">
+                            <i data-lucide="award" class="w-48 h-48"></i>
+                        </div>
+                        <div class="flex justify-between items-start mb-8 relative z-10">
+                            <div>
+                                <h4 class="text-2xl font-black text-white uppercase tracking-tighter">B.Tech (CSE)</h4>
+                                <p class="text-slate-400 text-sm font-bold italic tracking-widest uppercase">SRMIST, Delhi-NCR Campus</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-4xl font-black text-cyan-500 leading-none">9.42</p>
+                                <p class="text-[10px] font-black text-slate-600 uppercase tracking-widest mt-1">CGPA</p>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-500 font-black tracking-[0.2em] uppercase opacity-60">Batch 2024 — 2028 | Focused on Distributed Systems & AI Engineering.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div class="merit-box">
+                            <p class="merit-label">Botverse 25</p>
+                            <p class="merit-value text-amber-500">Rank 2</p>
+                        </div>
+                        <div class="merit-box">
+                            <p class="merit-label">Young Turks 25</p>
+                            <p class="merit-value text-indigo-400">98.48 %tile</p>
+                        </div>
+                        <div class="merit-box">
+                            <p class="merit-label">HackerRank</p>
+                            <p class="merit-value text-green-500">CS Proficiency</p>
+                        </div>
+                        <div class="merit-box">
+                            <p class="merit-label">Code4Cause</p>
+                            <p class="merit-value text-red-500">National Final</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-32 px-6 text-center">
+        <div class="max-w-5xl mx-auto py-24 rounded-[4rem] bg-gradient-to-b from-slate-900/60 to-transparent border border-slate-800 relative overflow-hidden group">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-80 bg-cyan-500/10 blur-[100px] group-hover:bg-cyan-500/20 transition-all duration-1000"></div>
+            
+            <h2 class="text-6xl md:text-8xl font-black text-white mb-10 tracking-tighter uppercase">
+                Let's <br />
+                <span class="text-cyan-500 underline underline-offset-[12px] decoration-4 tracking-widest">Connect?</span>
+            </h2>
+            <p class="text-xl text-slate-400 mb-14 max-w-xl mx-auto font-bold uppercase tracking-wide opacity-80 leading-relaxed px-4">
+                Currently vetting opportunities for Summer 2026. Reach out to collaborate on systems-scale challenges.
             </p>
-            <div class="flex justify-center space-x-4">
-                <a href="https://github.com/prishitatripathi" target="_blank" class="text-gray-300 hover:text-cyan-400 transition-colors"><i data-lucide="github" class="w-8 h-8"></i></a>
-                <a href="https://www.linkedin.com/in/prishita-tripathi-30a888350/" target="_blank" class="text-gray-300 hover:text-cyan-400 transition-colors"><i data-lucide="linkedin" class="w-8 h-8"></i></a>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section id="about" class="py-20">
-            <h2 class="text-3xl font-bold text-center text-white mb-12">About Me</h2>
-            <div class="max-w-4xl mx-auto glass-effect rounded-xl p-8">
-                <p class="text-lg text-gray-300 leading-relaxed">
-                    I am a dedicated Computer Science student at SRM University with a proven academic record and a strong passion for technology. My expertise lies in full-stack development, but my ambition is focused on Data Science. I enjoy building data-centric applications from concept to deployment, using technologies like Python, SQL, and various machine learning libraries.
-                    <br><br>
-                    I am a persistent problem-solver, having tackled over 200 DSA challenges and achieving success in competitive events. Notably, my project, an AI-powered career advisor, won **2nd place at the Botverse Hackathon**. I am eager to apply my software engineering skills to a challenging role where I can drive innovation, with the long-term goal of pursuing a Master's in Data Science.
-                </p>
-            </div>
-        </section>
-
-        <!-- Skills Section -->
-        <section id="skills" class="py-20">
-            <h2 class="text-3xl font-bold text-center text-white mb-12">Technical Skills</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <!-- Programming Languages -->
-                <div class="glass-effect rounded-xl p-6">
-                    <h3 class="text-xl font-semibold text-cyan-400 mb-4">Programming Languages</h3>
-                    <ul class="space-y-2">
-                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-5 h-5 text-cyan-500 mr-2"></i>JavaScript</li>
-                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-5 h-5 text-cyan-500 mr-2"></i>Java</li>
-                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-5 h-5 text-cyan-500 mr-2"></i>Python</li>
-                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-5 h-5 text-cyan-500 mr-2"></i>C++</li>
-                    </ul>
-                </div>
-                <!-- Frameworks & Libraries -->
-                <div class="glass-effect rounded-xl p-6">
-                    <h3 class="text-xl font-semibold text-cyan-400 mb-4">Frameworks & Libraries</h3>
-                    <ul class="space-y-2">
-                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-5 h-5 text-cyan-500 mr-2"></i>React & Angular</li>
-                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-5 h-5 text-cyan-500 mr-2"></i>Node.js</li>
-                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-5 h-5 text-cyan-500 mr-2"></i>TensorFlow & OpenCV</li>
-                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-5 h-5 text-cyan-500 mr-2"></i>Web3.js & SpaCy</li>
-                    </ul>
-                </div>
-                <!-- Tools & Technologies -->
-                <div class="glass-effect rounded-xl p-6">
-                    <h3 class="text-xl font-semibold text-cyan-400 mb-4">Tools & Technologies</h3>
-                    <ul class="space-y-2">
-                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-5 h-5 text-cyan-500 mr-2"></i>HTML & CSS</li>
-                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-5 h-5 text-cyan-500 mr-2"></i>SQL (MySQL, PostgreSQL)</li>
-                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-5 h-5 text-cyan-500 mr-2"></i>Git & Docker</li>
-                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-5 h-5 text-cyan-500 mr-2"></i>Postman & VS Code</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects Section -->
-        <section id="projects" class="py-20">
-            <h2 class="text-3xl font-bold text-center text-white mb-12">Projects</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <!-- Project 1 -->
-                <div class="glass-effect rounded-xl p-6 flex flex-col">
-                    <h3 class="text-xl font-semibold text-cyan-400 mb-2">Real-Time Collaborative Coding Platform</h3>
-                    <p class="text-gray-300 mb-4 flex-grow">A high-performance, full-stack web application that facilitates real-time collaborative coding for 20+ concurrent users with less than 100ms latency. Features live cursors, syntax highlighting, and seamless session synchronization, reducing team code review time by 35%.</p>
-                    <div class="mb-4">
-                        <span class="inline-block bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2">Node.js</span>
-                        <span class="inline-block bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2">React</span>
-                        <span class="inline-block bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2">WebSockets</span>
-                        <span class="inline-block bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2">Redis</span>
-                    </div>
-                    <div class="mt-auto">
-                        <a href="https://prishitatripathi.github.io/codecollab-app/" target="_blank" class="text-cyan-400 hover:text-cyan-300 font-semibold">Live Demo <i data-lucide="arrow-right" class="inline w-4 h-4"></i></a>
-                    </div>
-                </div>
-                <!-- Project 2 -->
-                <div class="glass-effect rounded-xl p-6 flex flex-col">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="text-xl font-semibold text-cyan-400">Career Navigator AI: SRM TimeMachine</h3>
-                        <span class="bg-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">🏆 2nd Place</span>
-                    </div>
-                    <p class="text-gray-300 mb-4 flex-grow">An award-winning, AI-powered career placement advisor for students. It analyzes academic profiles, skills, and projects to predict placement outcomes and provides personalized roadmaps and mock interview practice, boosting students' chances of success by 30%.</p>
-                    <div class="mb-4">
-                        <span class="inline-block bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2">HTML5</span>
-                        <span class="inline-block bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2">Tailwind CSS</span>
-                        <span class="inline-block bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2">JavaScript</span>
-                        <span class="inline-block bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2">Chart.js</span>
-                    </div>
-                    <div class="mt-auto">
-                        <a href="https://prishitatripathi.github.io/srm-timemachine/" target="_blank" class="text-cyan-400 hover:text-cyan-300 font-semibold">Live Demo <i data-lucide="arrow-right" class="inline w-4 h-4"></i></a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Experience Section -->
-        <section id="experience" class="py-20">
-            <h2 class="text-3xl font-bold text-center text-white mb-12">Experience</h2>
-            <div class="max-w-3xl mx-auto border-l-2 border-cyan-500 pl-8 relative">
-                <!-- Timeline Item -->
-                <div class="mb-12 relative">
-                    <div class="absolute -left-[42px] top-1 w-4 h-4 bg-cyan-500 rounded-full border-4 border-gray-900"></div>
-                    <p class="text-sm text-gray-400">Oct 2024 - Dec 2024</p>
-                    <h3 class="text-xl font-semibold text-cyan-400 mt-1">Web Development Intern</h3>
-                    <p class="text-gray-300 font-medium">Teachnook (Remote)</p>
-                    <ul class="mt-2 list-disc list-inside text-gray-300">
-                        <li>Developed and optimized responsive websites using React, improving user experience for over 1000 monthly visitors.</li>
-                        <li>Collaborated with mentors to implement RESTful APIs, boosting application performance by 30%.</li>
-                        <li>Gained hands-on experience with full-stack development workflows and version control with Git.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Education & Achievements Section -->
-        <section id="education" class="py-20">
-            <h2 class="text-3xl font-bold text-center text-white mb-12">Education & Achievements</h2>
-            <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-10">
-                <!-- Education -->
-                <div>
-                    <h3 class="text-2xl font-semibold text-cyan-400 mb-4">Education</h3>
-                    <div class="glass-effect rounded-xl p-6">
-                        <p class="font-bold text-white">B.Tech, Computer Science & Engineering</p>
-                        <p class="text-gray-300">SRM Institute Of Science And Technology, Delhi NCR</p>
-                        <p class="text-gray-400 text-sm">2024 - 2028 (Expected)</p>
-                        <p class="mt-2 text-cyan-400 font-semibold">CGPA: 9.42 / 10.0</p>
-                    </div>
-                </div>
-                <!-- Achievements -->
-                <div>
-                    <h3 class="text-2xl font-semibold text-cyan-400 mb-4">Achievements & Certifications</h3>
-                    <div class="glass-effect rounded-xl p-6">
-                        <ul class="space-y-2 text-gray-300">
-                            <li class="flex items-center"><i data-lucide="trophy" class="w-5 h-5 text-amber-400 mr-2"></i>2nd Place, Botverse Hackathon</li>
-                            <li class="flex items-center"><i data-lucide="award" class="w-5 h-5 text-cyan-500 mr-2"></i>Finalist, SRM Connect Hackathon 2024</li>
-                            <li class="flex items-center"><i data-lucide="award" class="w-5 h-5 text-cyan-500 mr-2"></i>Web Development Internship - Teachnook</li>
-                            <li class="flex items-center"><i data-lucide="award" class="w-5 h-5 text-cyan-500 mr-2"></i>Full Stack Development - Magan New</li>
-                            <li class="flex items-center"><i data-lucide="award" class="w-5 h-5 text-cyan-500 mr-2"></i>Basic Java & Python - HackerRank</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="py-20 text-center">
-            <h2 class="text-3xl font-bold text-white mb-4">Get In Touch</h2>
-            <p class="text-gray-300 max-w-xl mx-auto mb-8">I'm currently seeking new opportunities and would love to connect. The "Say Hello" button may not work in all browsers, but you can copy my email address below.</p>
-            <div class="flex flex-col items-center space-y-4">
-                <a href="mailto:prishitatripathi@gmail.com" class="inline-block bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-colors text-lg">
-                    Say Hello
+            <div class="flex flex-col md:flex-row justify-center items-center gap-6">
+                <a href="mailto:prishitatripathi@gmail.com" class="flex items-center gap-3 px-12 py-5 bg-white text-slate-900 font-black rounded-2xl hover:bg-cyan-400 hover:scale-105 transition-all uppercase tracking-widest text-sm shadow-xl shadow-white/5">
+                    INITIATE CONTACT <i data-lucide="mail" class="w-4 h-4"></i>
                 </a>
-                <div class="relative flex items-center bg-gray-800 p-2 rounded-lg mt-4">
-                    <span id="email-text" class="text-cyan-400 font-semibold">prishitatripathi@gmail.com</span>
-                    <button id="copy-button" class="ml-4 bg-gray-700 hover:bg-gray-600 p-2 rounded-md transition-colors" title="Copy email">
-                        <i data-lucide="copy" class="w-5 h-5 text-gray-300"></i>
-                    </button>
-                    <div id="copy-feedback" class="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-md opacity-0 transition-opacity">
-                        Copied!
-                    </div>
+                <div class="px-8 py-5 rounded-2xl bg-slate-900/50 border border-slate-800 font-mono text-cyan-400 text-xs font-bold tracking-widest">
+                    prishitatripathi@gmail.com
                 </div>
             </div>
-        </section>
-
-    </main>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 border-t border-gray-800">
-        <div class="container mx-auto px-6 py-6 text-center text-gray-400">
-            <div class="flex justify-center space-x-4 mb-4">
-                <a href="https://github.com/prishitatripathi" target="_blank" class="hover:text-cyan-400 transition-colors"><i data-lucide="github" class="w-6 h-6"></i></a>
-                <a href="https://www.linkedin.com/in/prishita-tripathi-30a888350/" target="_blank" class="hover:text-cyan-400 transition-colors"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+    <footer class="py-16 border-t border-slate-900 px-6 bg-slate-950/20">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-slate-700 text-[10px] font-black tracking-[0.5em] uppercase">
+            <p>© 2026 PRISHITA TRIPATHI — ARCHITECTED FOR SCALE.</p>
+            <div class="flex gap-10">
+                <a href="https://github.com/prishitatripathi/" target="_blank" class="hover:text-cyan-500 transition-colors">GITHUB</a>
+                <a href="https://www.linkedin.com/in/prishita-tripathi-30a888350/" target="_blank" class="hover:text-cyan-500 transition-colors">LINKEDIN</a>
+                <a href="#" class="hover:text-cyan-500 transition-colors">RESUME</a>
             </div>
-            <p>&copy; 2025 Prishita Tripathi. All Rights Reserved.</p>
         </div>
     </footer>
 
-    <script>
-        lucide.createIcons();
+    <!-- Lightbox Modal -->
+    <div id="cert-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 md:p-10">
+        <div class="absolute inset-0 bg-black/98 backdrop-blur-2xl" onclick="closeModal()"></div>
+        <div id="modal-content-wrapper" class="relative max-w-6xl w-full max-h-full overflow-hidden bg-[#020617] border border-slate-800 rounded-[3rem] shadow-2xl flex flex-col lg:flex-row modal-enter ring-1 ring-slate-800/50">
+            <!-- Content will be injected by JS -->
+        </div>
+    </div>
 
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+    <script>
+        // --- Configuration & State ---
+        const projects = [
+            {
+                id: 1, title: "PayFlow", tagline: "Fintech Ledger Infrastructure",
+                description: "A secure transaction system architected with FastAPI and MySQL. Implements atomic operations to ensure 100% data consistency.",
+                impact: "Zero-latency balance updates with industrial-grade Werkzeug security hashing.",
+                tech: ["FastAPI", "MySQL", "Python", "REST API"],
+                category: "fullstack", link: "https://payflow-backend-ytir.onrender.com"
+            },
+            {
+                id: 2, title: "SRM TimeMachine", tagline: "Predictive Career Advisor",
+                description: "Award-winning ML platform mapping academic metrics to industry placement trends.",
+                impact: "Won 2nd Place @ Botverse. Achieved 94% prediction accuracy.",
+                tech: ["Python", "FastAPI", "React", "Scikit-Learn"],
+                category: "ai", link: "https://prishitatripathi.github.io/srm-timemachine/"
+            },
+            {
+                id: 3, title: "SyncCode IDE", tagline: "Collaborative Real-time Editor",
+                description: "High-concurrency editor using WebSockets and Redis for sub-80ms state synchronization.",
+                impact: "Supports 20+ concurrent users with zero state drift.",
+                tech: ["Node.js", "Socket.io", "Redis", "Next.js"],
+                category: "fullstack", link: "https://prishitatripathi.github.io/codecollab-app/"
+            }
+        ];
+
+        const certificates = [
+            {
+                id: "botverse", title: "2nd Position - BotVerse 2025", issuer: "SRMIST CSI Chapter",
+                date: "August 22, 2025", category: "Award", color: "amber", icon: "trophy",
+                details: "Secured runner-up position among competitive participants in the flagship hackathon organized by the Computer Society of India at SRMIST."
+            },
+            {
+                id: "jpmorgan", title: "Software Engineering Simulation", issuer: "JPMorgan Chase & Co.",
+                date: "December 25, 2025", category: "Simulation", color: "blue", icon: "briefcase",
+                details: "Completed industry-standard tasks including Kafka Integration, H2 Integration, and REST API development."
+            },
+            {
+                id: "naukri", title: "98.48 Percentile - Young Turks", issuer: "Naukri Campus",
+                date: "September 29, 2025", category: "Merit", color: "indigo", icon: "medal",
+                details: "Recognized as a national top-performer in India's largest skill contest, validating technical proficiency across a massive candidate pool."
+            },
+            {
+                id: "udemy", title: "Ultimate Network Admin", issuer: "Udemy (Dan Mill)",
+                date: "March 24, 2026", category: "Certification", color: "cyan", icon: "globe",
+                details: "49.5 hours of specialized training in network infrastructure, routing, and system administration."
+            },
+            {
+                id: "teachnook", title: "Web Development Internship", issuer: "Teachnook x Btech Walleh",
+                date: "Nov 30, 2024", category: "Internship", color: "emerald", icon: "file-badge",
+                details: "Two-month intensive mentorship program on Web Development. Rated as a keen and enthusiastic candidate."
+            },
+            {
+                id: "hackerrank-java", title: "Java (Basic) Certification", issuer: "HackerRank",
+                date: "August 03, 2025", category: "Technical", color: "orange", icon: "code-2",
+                details: "Standardized verification of fundamental Java programming and problem-solving capabilities."
+            }
+        ];
+
+        // --- Core Functions ---
+
+        // Typing Effect
+        function initTyping() {
+            const text = "> npx create-impact@latest --user prishita";
+            const target = document.getElementById('terminal-text');
+            let i = 0;
+            const interval = setInterval(() => {
+                target.textContent = text.slice(0, i);
+                i++;
+                if (i > text.length) clearInterval(interval);
+            }, 50);
+        }
+
+        // Marquee Content
+        function initMarquee() {
+            const container = document.getElementById('marquee-content');
+            const items = certificates.map(c => `
+                <div class="flex items-center gap-3">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-500"></i> ${c.title}
+                </div>
+            `).join('');
+            container.innerHTML = items + items; // Duplicate for loop
+            lucide.createIcons();
+        }
+
+        // Render Projects
+        function renderProjects(filter = 'all') {
+            const grid = document.getElementById('project-grid');
+            const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
+            
+            grid.innerHTML = filtered.map(p => `
+                <div class="glass-effect rounded-[2.5rem] p-12 flex flex-col group relative overflow-hidden">
+                    <div class="flex justify-between items-start mb-8">
+                        <div class="p-4 bg-cyan-500/10 rounded-2xl text-cyan-500 border border-cyan-500/20 shadow-inner">
+                            <i data-lucide="${p.title === 'PayFlow' ? 'wallet' : p.category === 'ai' ? 'sparkles' : 'terminal'}" class="w-7 h-7"></i>
+                        </div>
+                        <a href="${p.link}" target="_blank" class="p-3.5 rounded-full border border-slate-800 text-slate-500 hover:text-white hover:bg-slate-800 transition-all">
+                            <i data-lucide="external-link" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                    <div class="space-y-4 flex-grow">
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <h4 class="text-2xl font-black text-white uppercase tracking-tighter">${p.title}</h4>
+                            ${p.title.includes("TimeMachine") ? '<span class="px-3 py-1 bg-amber-500/10 text-amber-500 text-[9px] font-black uppercase tracking-widest rounded-full border border-amber-500/20 flex items-center gap-1"><i data-lucide="trophy" class="w-3 h-3"></i> Hackathon Winner</span>' : ''}
+                        </div>
+                        <p class="text-cyan-500 font-black text-[10px] tracking-[0.2em] uppercase">${p.tagline}</p>
+                        <p class="text-slate-400 leading-relaxed text-lg font-medium">${p.description}</p>
+                        <div class="p-5 bg-slate-950/40 rounded-2xl border border-slate-800/50 mt-6 group-hover:bg-slate-950/60 transition-colors">
+                            <p class="text-sm text-slate-300 font-medium">
+                                <span class="text-cyan-500 font-black uppercase text-[10px] block mb-2 tracking-widest">Performance & Optimization</span>
+                                ${p.impact}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mt-10 pt-8 border-t border-slate-800 flex flex-wrap gap-4">
+                        ${p.tech.map(t => `<span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">${t}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // Project Filtering
+        function filterProjects(tag) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase() === tag);
+            });
+            renderProjects(tag);
+        }
+
+        // Render Credentials
+        function renderCredentials() {
+            const grid = document.getElementById('credential-grid');
+            grid.innerHTML = certificates.map(c => `
+                <div onclick="openModal('${c.id}')" class="group relative cursor-pointer glass-effect rounded-[2rem] p-8 border-slate-800 hover:bg-slate-900/60 overflow-hidden">
+                    <div class="absolute -right-20 -top-20 w-40 h-40 rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity duration-500 bg-${c.color}-500"></div>
+                    <div class="relative z-10 space-y-6">
+                        <div class="w-16 h-16 rounded-2xl flex items-center justify-center bg-${c.color}-500/10 border border-${c.color}-500/20 text-${c.color}-500 transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
+                            <i data-lucide="${c.icon}" class="w-8 h-8"></i>
+                        </div>
+                        <div class="space-y-2">
+                            <h4 class="text-xl font-black text-white leading-tight uppercase tracking-tighter group-hover:text-cyan-400 transition-colors">${c.title}</h4>
+                            <div class="flex items-center justify-between">
+                                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">${c.issuer}</p>
+                                <p class="text-[9px] font-mono text-cyan-500 bg-cyan-500/10 px-2 py-0.5 rounded-full">${c.date}</p>
+                            </div>
+                        </div>
+                        <div class="pt-6 border-t border-slate-800/50 flex items-center justify-between">
+                            <span class="text-[10px] font-black uppercase text-slate-400 tracking-widest flex items-center gap-2">
+                                <i data-lucide="fingerprint" class="w-3 h-3 text-cyan-500"></i> SECURE ASSET
+                            </span>
+                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-cyan-500 group-hover:text-slate-900 transition-all">
+                                <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // Modal Logic
+        function openModal(id) {
+            const cert = certificates.find(c => c.id === id);
+            const modal = document.getElementById('cert-modal');
+            const wrapper = document.getElementById('modal-content-wrapper');
+            
+            wrapper.innerHTML = `
+                <div class="lg:w-[60%] bg-slate-950 p-12 flex flex-col items-center justify-center relative border-b lg:border-b-0 lg:border-r border-slate-800 overflow-hidden">
+                    <div class="absolute inset-0 bg-grid-slate-800/[0.05]" style="background-image: radial-gradient(circle, #334155 1px, transparent 1px); background-size: 20px 20px;"></div>
+                    <div class="relative w-full max-w-md aspect-[3/4] rounded-[2.5rem] p-10 flex flex-col justify-between border-2 border-slate-800 shadow-2xl overflow-hidden shimmer-effect bg-slate-900/50">
+                        <div class="flex justify-between items-start relative z-10">
+                            <div class="p-4 rounded-2xl bg-${cert.color}-500/10 text-${cert.color}-500 shadow-xl border border-${cert.color}-500/20">
+                                <i data-lucide="${cert.icon}" class="w-10 h-10"></i>
+                            </div>
+                            <i data-lucide="qr-code" class="w-10 h-10 text-slate-700 opacity-50"></i>
+                        </div>
+                        <div class="space-y-4 relative z-10">
+                            <p class="text-[10px] font-black tracking-[0.4em] text-cyan-500 uppercase">Authenticated Document</p>
+                            <h3 class="text-3xl font-black text-white leading-none uppercase tracking-tighter">${cert.title}</h3>
+                            <p class="text-slate-500 text-sm font-bold uppercase tracking-widest">${cert.issuer}</p>
+                        </div>
+                        <div class="flex justify-between items-end relative z-10">
+                            <div class="space-y-1">
+                                <p class="text-[8px] font-black text-slate-600 uppercase">Global Identifier</p>
+                                <p class="text-[10px] font-mono text-slate-400">PTR-2026-VAL-${cert.id.toUpperCase()}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[8px] font-black text-slate-600 uppercase">Verification Hash</p>
+                                <div class="flex gap-1">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-cyan-500/30"></div>
+                                    <div class="w-1.5 h-1.5 rounded-full bg-cyan-500/30"></div>
+                                    <div class="w-1.5 h-1.5 rounded-full bg-cyan-500/30"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-4 border-cyan-500/10 rounded-full w-64 h-64 flex items-center justify-center rotate-12 pointer-events-none">
+                            <p class="text-cyan-500/10 font-black text-5xl uppercase">VERIFIED</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-[40%] p-10 md:p-16 flex flex-col bg-[#020617] relative">
+                    <div class="flex justify-between items-start mb-10">
+                        <span class="inline-block bg-${cert.color}-500/10 text-${cert.color}-500 border border-${cert.color}-500/20 text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-lg shadow-lg">
+                            ${cert.category}
+                        </span>
+                        <button onclick="closeModal()" class="p-2.5 hover:bg-slate-800 rounded-full text-slate-500 hover:text-white transition-all border border-slate-800/50">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                    <h2 class="text-4xl font-black text-white leading-tight mb-8 uppercase tracking-tighter">${cert.title}</h2>
+                    <div class="space-y-8 flex-grow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-cyan-500">
+                                <i data-lucide="activity" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-1">Status</p>
+                                <p class="text-green-500 font-black uppercase text-xs tracking-widest flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Valid & Authenticated
+                                </p>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-slate-900/40 rounded-[2rem] border border-slate-800/50 shadow-inner">
+                            <p class="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-3">Professional Impact</p>
+                            <p class="text-slate-400 text-sm leading-relaxed font-bold italic tracking-wide">${cert.details}</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 py-5 border-y border-slate-800/50">
+                            <div>
+                                <p class="text-[10px] font-black text-slate-600 tracking-widest uppercase mb-1">Issued</p>
+                                <p class="text-white font-black text-sm">${cert.date}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] font-black text-slate-600 tracking-widest uppercase mb-1">Asset Class</p>
+                                <p class="text-white font-black text-sm">${cert.category}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-10 space-y-4">
+                        <button onclick="closeModal()" class="w-full py-5 bg-white text-slate-900 font-black rounded-2xl hover:bg-cyan-400 transition-all uppercase tracking-[0.2em] text-[10px] shadow-xl">
+                            CLOSE VAULT
+                        </button>
+                        <p class="text-center text-[9px] text-slate-600 font-black uppercase tracking-widest">Signed digitally via prishitatripathi.sys</p>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            document.getElementById('cert-modal').classList.add('hidden');
+        }
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-[#020617]/90', 'backdrop-blur-md', 'border-b', 'border-slate-800', 'py-4');
+                nav.classList.remove('py-6');
+            } else {
+                nav.classList.remove('bg-[#020617]/90', 'backdrop-blur-md', 'border-b', 'border-slate-800', 'py-4');
+                nav.classList.add('py-6');
+            }
         });
 
-        // Copy email functionality
-        const copyButton = document.getElementById('copy-button');
-        const emailText = document.getElementById('email-text').innerText;
-        const copyFeedback = document.getElementById('copy-feedback');
-
-        copyButton.addEventListener('click', () => {
-            // Create a temporary textarea element to hold the text
-            const textArea = document.createElement('textarea');
-            textArea.value = emailText;
-            
-            // Style it to be invisible and add to the DOM
-            textArea.style.position = 'absolute';
-            textArea.style.left = '-9999px';
-            document.body.appendChild(textArea);
-            
-            textArea.select();
-            
-            try {
-                // Execute the copy command
-                document.execCommand('copy');
-                
-                // Show feedback
-                copyFeedback.classList.remove('opacity-0');
-                setTimeout(() => {
-                    copyFeedback.classList.add('opacity-0');
-                }, 2000); // Hide after 2 seconds
-                
-            } catch (err) {
-                console.error('Failed to copy text: ', err);
-                // Optional: Show an error message to the user
-            }
-            
-            // Clean up by removing the temporary element
-            document.body.removeChild(textArea);
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initTyping();
+            initMarquee();
+            renderProjects();
+            renderCredentials();
         });
     </script>
 
+    <!-- Global Styles for Components -->
+    <style>
+        .skill-tag {
+            padding: 0.5rem 0.875rem;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            border-radius: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #cbd5e1;
+            transition: all 0.3s;
+        }
+        .skill-tag:hover {
+            border-color: #06b6d4;
+            color: #fff;
+        }
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.75rem;
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #64748b;
+            transition: all 0.3s;
+        }
+        .filter-btn.active {
+            background-color: #06b6d4;
+            color: #020617;
+        }
+        .merit-box {
+            padding: 1.25rem;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid #1e293b;
+            border-radius: 1rem;
+            transition: border-color 0.3s;
+        }
+        .merit-box:hover {
+            border-color: #334155;
+        }
+        .merit-label {
+            font-size: 10px;
+            font-weight: 900;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.375rem;
+        }
+        .merit-value {
+            font-size: 0.875rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+    </style>
 </body>
 </html>
