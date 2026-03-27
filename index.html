@@ -3,165 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prishita Tripathi | Full Stack Systems Engineer</title>
+    <title>Prishita Tripathi | Real-Time Systems & Full Stack Engineer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:ital,wght@1,900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Playfair+Display:ital,wght@1,900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
             --cyan-glow: rgba(34, 211, 238, 0.4);
+            --bg-dark: #020617;
         }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #020617;
+            background-color: var(--bg-dark);
             color: #f1f5f9;
             overflow-x: hidden;
         }
         .font-serif { font-family: 'Playfair Display', serif; }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
-        
-        .glass-card {
-            background: rgba(15, 23, 42, 0.3);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(30, 41, 59, 0.7);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .glass-card:hover {
-            border-color: rgba(34, 211, 238, 0.5);
-            background: rgba(15, 23, 42, 0.5);
-            transform: scale(1.01);
-            box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5);
+
+        /* --- High-End Background System --- */
+        .background-container {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-color: var(--bg-dark);
+            overflow: hidden;
         }
 
-        .hero-gradient {
-            background: radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.08) 0%, transparent 50%);
+        .grain-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            opacity: 0.15;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+
+        .mesh-gradient {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.1) 0px, transparent 50%);
+            filter: blur(80px);
+        }
+
+        /* Dot Matrix Grid */
+        .dot-grid {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            mask-image: radial-gradient(circle at center, black, transparent 80%);
+        }
+
+        /* Moving Mouse Spotlight */
+        #spotlight {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 10;
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(34, 211, 238, 0.05), transparent 80%);
+            transition: opacity 0.3s ease;
+        }
+
+        /* --- Components --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(30, 41, 59, 0.7);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(400px circle at var(--card-mouse-x) var(--card-mouse-y), rgba(255, 255, 255, 0.08), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .glass-card:hover::before { opacity: 1; }
+        .glass-card:hover {
+            border-color: rgba(34, 211, 238, 0.4);
+            transform: translateY(-8px) scale(1.005);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-title {
+            font-size: clamp(3.5rem, 12vw, 9rem);
+            line-height: 0.8;
+            letter-spacing: -0.06em;
+            background: linear-gradient(to bottom, #fff 40%, #64748b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes shimmer-text {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .shimmer-gradient {
+            background: linear-gradient(90deg, #22d3ee, #818cf8, #22d3ee);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer-text 8s linear infinite;
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-20px); }
         }
-        .float-animation { animation: float 6s ease-in-out infinite; }
+        .float-animation { animation: float 8s ease-in-out infinite; }
 
         .cursor-blink { animation: blink 1s step-end infinite; }
         @keyframes blink { from, to { opacity: 1 } 50% { opacity: 0 } }
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #020617; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
-
-        .github-contribution-grid {
-            display: grid;
-            grid-template-columns: repeat(25, 1fr);
-            gap: 4px;
-        }
-        .contribution-cell {
-            aspect-ratio: 1;
-            border-radius: 2px;
-            background: #0f172a;
-        }
-        .active-1 { background: #0e4429; }
-        .active-2 { background: #006d32; }
-        .active-3 { background: #26a641; }
-        .active-4 { background: #39d353; }
+        ::-webkit-scrollbar-thumb:hover { background: #22d3ee; }
 
         @keyframes marquee {
             0% { transform: translateX(0); }
-            100% { transform: translateX(-33.33%); }
+            100% { transform: translateX(-50%); }
         }
         .animate-marquee {
             display: flex;
             width: max-content;
-            animation: marquee 80s linear infinite;
+            animation: marquee 60s linear infinite;
         }
     </style>
 </head>
 <body class="selection:bg-cyan-500/30 selection:text-cyan-200">
+    <!-- Background System -->
+    <div class="background-container">
+        <div class="dot-grid"></div>
+        <div class="mesh-gradient"></div>
+        <div class="grain-overlay"></div>
+    </div>
+    <div id="spotlight"></div>
 
     <!-- Navigation -->
-    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-500 py-6 border-b border-transparent">
-        <div class="max-w-7xl mx-auto px-8 flex justify-between items-center">
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-700 py-6">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
             <div class="flex items-center gap-4 group cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                <div class="w-12 h-12 bg-cyan-500 rounded-2xl flex items-center justify-center text-slate-950 font-black group-hover:rotate-12 transition-all shadow-2xl shadow-cyan-500/20">PT</div>
+                <div class="w-10 h-10 bg-cyan-500 rounded-xl flex items-center justify-center text-slate-950 font-black group-hover:rotate-12 transition-all shadow-lg shadow-cyan-500/20">PT</div>
                 <div class="flex flex-col">
                     <span class="font-black text-lg tracking-tighter text-white uppercase leading-none">Tri<span class="text-cyan-500">pathi</span></span>
-                    <span class="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">Full Stack Systems</span>
+                    <span class="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">Real-Time Systems Node</span>
                 </div>
             </div>
-            <div class="hidden md:flex items-center gap-12 text-[10px] font-black text-slate-400 tracking-[0.2em] uppercase">
+            <div class="hidden md:flex items-center gap-10 text-[10px] font-black text-slate-400 tracking-[0.2em] uppercase">
                 <a href="#about" class="hover:text-cyan-400 transition-colors">Philosophy</a>
                 <a href="#projects" class="hover:text-cyan-400 transition-colors">Architecture</a>
-                <a href="#credentials" class="hover:text-cyan-400 transition-colors">Verification</a>
-                <a href="mailto:prishitatripathi@gmail.com" class="px-8 py-3 bg-white text-slate-950 rounded-full hover:bg-cyan-400 transition-all hover:-translate-y-0.5 active:translate-y-0 uppercase font-black tracking-widest">Hire Me</a>
+                <a href="#credentials" class="hover:text-cyan-400 transition-colors">Merit Vault</a>
+                <a href="mailto:prishitatripathi@gmail.com" class="px-8 py-3 bg-white text-slate-950 rounded-full hover:bg-cyan-400 transition-all font-black shadow-[0_10px_30px_-10px_rgba(255,255,255,0.2)]">INITIATE THREAD</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="relative pt-56 pb-40 px-8 overflow-hidden hero-gradient">
+    <section class="relative pt-64 pb-48 px-6 md:px-12 overflow-hidden">
         <div class="max-w-7xl mx-auto relative">
-            <div class="flex flex-col lg:flex-row items-start gap-24">
-                <div class="flex-1 space-y-12">
-                    <div class="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.4em] uppercase">
+            <div class="flex flex-col lg:flex-row items-center lg:items-start gap-16 lg:gap-32">
+                <div class="flex-1 space-y-12 text-center lg:text-left reveal">
+                    <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.5em] uppercase">
                         <span class="relative flex h-2 w-2">
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
                         </span>
-                        Optimized for Distributed Scale
+                        Authenticated Engineering Access
                     </div>
                     
-                    <h1 class="text-7xl md:text-9xl font-black text-white leading-[0.8] tracking-tighter uppercase">
-                        I build <br />
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500 font-serif italic tracking-normal lowercase">real-time</span> <br />
-                        infrastructure.
+                    <h1 class="hero-title font-black uppercase">
+                        BUILDING <br />
+                        <span class="shimmer-gradient lowercase font-serif italic tracking-normal">real-time</span> <br />
+                        SYSTEMS.
                     </h1>
 
-                    <div class="max-w-2xl">
-                        <p class="text-2xl text-slate-400 leading-relaxed font-medium">
-                            Full Stack Engineer specializing in <span class="text-white">low-latency state synchronization</span> and <span class="text-white">ledger integrity</span>. Transforming complex datasets into high-concurrency systems.
+                    <div class="max-w-2xl mx-auto lg:mx-0">
+                        <p class="text-xl md:text-3xl text-slate-400 leading-relaxed font-medium opacity-80">
+                            Full Stack Engineer specializing in <span class="text-white font-bold">low-latency state sync</span> and <span class="text-white font-bold">ledger integrity</span>. Maintaining a 9.42 CGPA @ SRMIST.
                         </p>
                     </div>
 
-                    <div class="flex flex-wrap gap-8 items-center pt-6">
-                        <a href="#projects" class="group flex items-center gap-4 px-12 py-6 bg-cyan-500 text-slate-950 font-black rounded-3xl hover:bg-cyan-400 transition-all shadow-2xl shadow-cyan-500/20 hover:scale-105">
-                            VIEW CASE STUDIES <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    <div class="flex flex-wrap justify-center lg:justify-start gap-8 pt-8">
+                        <a href="#projects" class="group flex items-center gap-4 px-12 py-6 bg-cyan-500 text-slate-950 font-black rounded-2xl hover:bg-cyan-400 transition-all shadow-[0_20px_50px_-15px_rgba(34,211,238,0.4)] uppercase tracking-widest text-xs">
+                            View Deployment Case Studies <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-2 transition-transform"></i>
                         </a>
-                        <div class="flex items-center gap-10 opacity-60 hover:opacity-100 transition-opacity px-6 border-l border-slate-800">
-                            <a href="https://github.com/prishitatripathi/" target="_blank" class="hover:text-cyan-400 transition-transform hover:scale-110"><i data-lucide="github" class="w-7 h-7"></i></a>
-                            <a href="https://www.linkedin.com/in/prishita-tripathi-30a888350/" target="_blank" class="hover:text-cyan-400 transition-transform hover:scale-110"><i data-lucide="linkedin" class="w-7 h-7"></i></a>
+                        <div class="flex items-center gap-10 px-10 border-l border-slate-800">
+                            <a href="https://github.com/prishitatripathi/" target="_blank" class="hover:text-cyan-400 transition-all hover:scale-125"><i data-lucide="github" class="w-7 h-7"></i></a>
+                            <a href="https://www.linkedin.com/in/prishita-tripathi-30a888350/" target="_blank" class="hover:text-cyan-400 transition-all hover:scale-125"><i data-lucide="linkedin" class="w-7 h-7"></i></a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Stats Dashboard -->
-                <div class="hidden lg:block w-[400px] space-y-6 float-animation">
-                    <div class="glass-card rounded-[2.5rem] p-10 space-y-8">
+                <!-- Floating System Dashboard -->
+                <div class="w-full max-w-[450px] lg:w-[420px] space-y-8 float-animation hidden lg:block reveal">
+                    <div class="glass-card rounded-[3rem] p-12 space-y-10 border-slate-700/40">
                         <div class="flex justify-between items-center">
-                            <i data-lucide="terminal" class="text-cyan-500 w-6 h-6"></i>
-                            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Active Runtime</span>
+                            <i data-lucide="activity" class="text-cyan-500 w-6 h-6"></i>
+                            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">ptr-runtime: v2.0.26</span>
                         </div>
                         <div class="space-y-2">
-                            <p class="text-5xl font-black text-white">9.42<span class="text-cyan-500 font-serif">/</span><span class="text-slate-700">10</span></p>
-                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Cumulative Grade Integrity</p>
+                            <p class="text-6xl font-black text-white leading-none tracking-tighter">9.42<span class="text-cyan-500 font-serif italic text-4xl">/10</span></p>
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] pt-2">Academic Consistency // Verified</p>
                         </div>
-                        <div class="pt-8 border-t border-slate-800/50 space-y-4">
-                            <div class="flex justify-between items-center">
-                                <span class="text-xs font-bold text-slate-400">Concurrency Skills</span>
-                                <span class="text-xs font-mono text-cyan-500">100%</span>
+                        <div class="pt-8 border-t border-slate-800 space-y-6">
+                            <div class="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
+                                <span class="text-slate-400">System Concurrency</span>
+                                <span class="text-cyan-500 shimmer-gradient">Peak Performance</span>
                             </div>
-                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                                <div class="bg-cyan-500 h-full w-full"></div>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div class="bg-gradient-to-r from-cyan-500 to-indigo-500 h-full w-[94%] shadow-[0_0_15px_rgba(34,211,238,0.5)]"></div>
                             </div>
                         </div>
-                        <p class="text-[11px] font-mono text-slate-500 italic">"I don't just write code; I architect systems that survive load."</p>
-                    </div>
-                    <!-- Contribution Simulation -->
-                    <div class="glass-card rounded-[2.5rem] p-8">
-                        <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-6">Engineered Activity (GitHub)</p>
-                        <div class="github-contribution-grid" id="github-grid"></div>
+                        <div class="font-mono text-[11px] text-slate-400 italic bg-slate-900/80 p-5 rounded-2xl border border-slate-800 shadow-inner">
+                            <span id="terminal-text" class="text-cyan-400 font-bold"></span><span class="cursor-blink">|</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -169,36 +244,42 @@
     </section>
 
     <!-- Philosophy -->
-    <section id="about" class="py-32 px-8">
+    <section id="about" class="py-32 px-6 md:px-12">
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-                <div class="space-y-10">
-                    <h2 class="text-sm font-bold tracking-[0.5em] text-cyan-500 uppercase flex items-center gap-3">
-                        <i data-lucide="activity" class="w-4 h-4"></i> How I Build Systems
+                <div class="space-y-10 reveal">
+                    <h2 class="text-sm font-bold tracking-[0.6em] text-cyan-500 uppercase flex items-center gap-3">
+                        <i data-lucide="fingerprint" class="w-4 h-4"></i> How I Build Systems
                     </h2>
-                    <h3 class="text-5xl font-black text-white leading-tight uppercase tracking-tighter">Engineering <br />over <span class="text-cyan-500 italic font-serif tracking-normal">Syntax.</span></h3>
-                    <p class="text-xl text-slate-400 leading-relaxed font-medium">
-                        I approach development as a systems architect. For every feature, I prioritize **ACID compliance**, **State Synchronization**, and **Security Hashing**. My 9.42 GPA is a metric of my discipline; my hackathon wins are metrics of my delivery.
+                    <h3 class="text-5xl md:text-7xl font-black text-white leading-tight uppercase tracking-tighter">Architecture <br />over <span class="text-cyan-500 italic font-serif tracking-normal">Syntax.</span></h3>
+                    <p class="text-xl md:text-2xl text-slate-400 leading-relaxed font-medium">
+                        I approach development as a systems engineer. Every product I build focuses on <span class="text-white">atomic operations</span>, <span class="text-white">low-latency sync</span>, and <span class="text-white">audit trails</span>.
                     </p>
-                    <div class="grid grid-cols-2 gap-8 pt-6">
-                        <div>
-                            <p class="text-3xl font-black text-white">200+</p>
-                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">DSA Challenges Optimized</p>
+                    <div class="grid grid-cols-2 gap-8 pt-8">
+                        <div class="p-8 glass-card rounded-3xl">
+                            <p class="text-4xl font-black text-white tracking-tighter">200+</p>
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-3">DSA Challenges Refined</p>
                         </div>
-                        <div>
-                            <p class="text-3xl font-black text-white">Top 1%</p>
-                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">Naukri Young Turks</p>
+                        <div class="p-8 glass-card rounded-3xl">
+                            <p class="text-4xl font-black text-white tracking-tighter">Top 1.5%</p>
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-3">Naukri Young Turks Rank</p>
                         </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 gap-6">
-                    <div class="glass-card p-10 rounded-[2.5rem] space-y-4 border-l-4 border-l-cyan-500">
-                        <h4 class="text-white font-black uppercase tracking-widest text-sm">Real-Time Core</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">Mastery of WebSockets and Pub/Sub architectures for sub-100ms state propagation across distributed clients.</p>
+                <div class="grid grid-cols-1 gap-8 reveal">
+                    <div class="glass-card p-12 rounded-[3rem] border-l-4 border-l-cyan-500 group">
+                        <div class="flex justify-between items-center mb-6">
+                            <h4 class="text-white font-black uppercase tracking-widest text-base group-hover:text-cyan-400 transition-colors">Real-Time Core</h4>
+                            <i data-lucide="zap" class="text-cyan-400 w-6 h-6"></i>
+                        </div>
+                        <p class="text-slate-400 text-base leading-relaxed">Implementing sub-100ms state propagation using WebSockets and Redis Pub/Sub for high-throughput collaborative environments.</p>
                     </div>
-                    <div class="glass-card p-10 rounded-[2.5rem] space-y-4 border-l-4 border-l-indigo-500">
-                        <h4 class="text-white font-black uppercase tracking-widest text-sm">Fintech Integrity</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">Architecting atomic database locks and secure ledger systems using FastAPI and SQL protection layers.</p>
+                    <div class="glass-card p-12 rounded-[3rem] border-l-4 border-l-indigo-500 group">
+                        <div class="flex justify-between items-center mb-6">
+                            <h4 class="text-white font-black uppercase tracking-widest text-base group-hover:text-indigo-400 transition-colors">Data Integrity</h4>
+                            <i data-lucide="shield-check" class="text-indigo-400 w-6 h-6"></i>
+                        </div>
+                        <p class="text-slate-400 text-base leading-relaxed">Designing database architectures with row-level locking to prevent race conditions in financial ledger systems.</p>
                     </div>
                 </div>
             </div>
@@ -206,69 +287,63 @@
     </section>
 
     <!-- Case Studies -->
-    <section id="projects" class="py-32 px-8 bg-slate-950/20">
+    <section id="projects" class="py-32 px-6 md:px-12 bg-slate-900/10">
         <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-end gap-10 mb-20">
-                <div class="text-center md:text-left">
-                    <h2 class="text-sm font-bold tracking-[0.5em] text-cyan-500 uppercase mb-5">Engineering Portfolios</h2>
-                    <h3 class="text-6xl font-black text-white uppercase tracking-tight">Case Studies.</h3>
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-end gap-12 mb-24">
+                <div class="text-center md:text-left reveal">
+                    <h2 class="text-sm font-bold tracking-[0.5em] text-cyan-500 uppercase mb-5">Selected Deployment History</h2>
+                    <h3 class="text-6xl md:text-8xl font-black text-white uppercase tracking-tight leading-none">The Lab.</h3>
                 </div>
-                <div class="flex bg-slate-900 p-1.5 rounded-2xl border border-slate-800 shadow-2xl">
-                    <button onclick="filterProjects('all')" class="filter-btn active">all</button>
-                    <button onclick="filterProjects('fullstack')" class="filter-btn">fullstack</button>
-                    <button onclick="filterProjects('ai')" class="filter-btn">ai</button>
+                <div class="flex bg-slate-950/80 p-2 rounded-2xl border border-slate-800 shadow-2xl reveal">
+                    <button onclick="filterProjects('all')" class="filter-btn active">ALL_SYSTEMS</button>
+                    <button onclick="filterProjects('realtime')" class="filter-btn">REAL_TIME</button>
+                    <button onclick="filterProjects('intelligent')" class="filter-btn">INTELLIGENCE</button>
                 </div>
             </div>
 
-            <div id="project-grid" class="grid grid-cols-1 gap-12">
-                <!-- Case studies injected via JS -->
+            <div id="project-grid" class="grid grid-cols-1 gap-16">
+                <!-- JS Injected Case Studies -->
             </div>
         </div>
     </section>
 
-    <!-- Marquee -->
-    <div class="bg-slate-900/30 border-y border-slate-800/50 py-12 overflow-hidden relative group">
+    <!-- Ribbon Marquee -->
+    <div class="bg-slate-900/40 border-y border-slate-800/60 py-16 overflow-hidden relative">
         <div class="animate-marquee">
-            <div id="marquee-content" class="flex gap-20 whitespace-nowrap px-10 text-slate-500 font-black uppercase tracking-[0.4em] text-[10px] italic">
-                <!-- Injected JS -->
-            </div>
+            <div id="marquee-content" class="flex gap-24 whitespace-nowrap px-12 text-slate-500 font-black uppercase tracking-[0.6em] text-xs italic"></div>
         </div>
     </div>
 
     <!-- Merit Vault -->
-    <section id="credentials" class="py-32 px-8">
+    <section id="credentials" class="py-32 px-6 md:px-12">
         <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-10 mb-20">
-                <div class="text-center md:text-left">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-12 mb-24">
+                <div class="text-center md:text-left reveal">
                     <h2 class="text-sm font-bold tracking-[0.5em] text-cyan-500 uppercase mb-5 flex items-center justify-center md:justify-start gap-3">
-                        <i data-lucide="shield-check" class="w-4 h-4"></i> Verified Assets
+                        <i data-lucide="medal" class="w-5 h-5"></i> Authenticated Merit History
                     </h2>
-                    <h3 class="text-6xl font-black text-white uppercase tracking-tight">Credential Vault.</h3>
+                    <h3 class="text-5xl md:text-7xl font-black text-white uppercase tracking-tight leading-none">Vault.</h3>
                 </div>
             </div>
 
-            <div id="credential-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div id="credential-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 reveal">
                 <!-- Injected via JS -->
             </div>
         </div>
     </section>
 
-    <!-- Terminal Hidden Support for ID consistency -->
-    <div class="hidden"><span id="terminal-text"></span></div>
-
-    <!-- Contact -->
-    <section id="contact" class="py-40 px-8 text-center relative overflow-hidden">
-        <div class="absolute inset-0 hero-gradient opacity-50 pointer-events-none"></div>
-        <div class="max-w-5xl mx-auto relative z-10">
+    <!-- Final Call -->
+    <section id="contact" class="py-48 px-6 text-center relative overflow-hidden">
+        <div class="max-w-5xl mx-auto relative z-10 reveal">
             <h2 class="text-7xl md:text-9xl font-black text-white mb-12 tracking-tighter uppercase leading-[0.8]">
                 Request <br />
-                <span class="text-cyan-500 underline underline-offset-[24px] decoration-8 tracking-widest">Access.</span>
+                <span class="shimmer-gradient underline underline-offset-[30px] decoration-8 tracking-widest uppercase">Access.</span>
             </h2>
-            <p class="text-2xl text-slate-400 mb-20 max-w-2xl mx-auto font-bold uppercase tracking-widest leading-relaxed">
-                Now open for Summer 2026 technical internships. High concurrency, high impact.
+            <p class="text-2xl md:text-3xl text-slate-400 mb-20 max-w-3xl mx-auto font-black uppercase tracking-widest opacity-60 leading-relaxed px-6">
+                Now open for Summer 2026 internships. High concurrency, high integrity, zero friction.
             </p>
-            <div class="flex flex-col md:flex-row justify-center items-center gap-10">
-                <a href="mailto:prishitatripathi@gmail.com" class="flex items-center gap-4 px-16 py-8 bg-white text-slate-950 font-black rounded-[2.5rem] hover:bg-cyan-400 hover:scale-105 transition-all uppercase tracking-[0.2em] text-sm shadow-2xl">
+            <div class="flex flex-col md:flex-row justify-center items-center gap-12">
+                <a href="mailto:prishitatripathi@gmail.com" class="flex items-center gap-6 px-16 py-8 bg-white text-slate-950 font-black rounded-3xl hover:bg-cyan-400 hover:scale-105 transition-all uppercase tracking-[0.3em] text-sm shadow-[0_20px_50px_rgba(255,255,255,0.1)]">
                     INITIALIZE THREAD <i data-lucide="mail" class="w-6 h-6"></i>
                 </a>
             </div>
@@ -276,73 +351,236 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-20 border-t border-slate-900 px-8 bg-slate-950/40">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-            <div class="flex flex-col gap-2">
-                <span class="text-white font-black uppercase tracking-widest text-lg">Prishita Tripathi</span>
-                <span class="text-slate-600 text-[10px] font-black uppercase tracking-[0.4em]">Designed to scale // 2026 Edition</span>
+    <footer class="py-24 border-t border-slate-900 px-6 md:px-12 bg-slate-950/60">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-16 text-center md:text-left">
+            <div class="flex flex-col gap-4">
+                <span class="text-white font-black uppercase tracking-widest text-2xl">Prishita Tripathi</span>
+                <span class="text-slate-600 text-[10px] font-black uppercase tracking-[0.5em]">Systems Engineering Node // 2026.SYS.ARCH</span>
             </div>
-            <div class="flex gap-12 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                <a href="https://github.com/prishitatripathi/" class="hover:text-white transition-colors">GITHUB</a>
-                <a href="https://www.linkedin.com/in/prishita-tripathi-30a888350/" class="hover:text-white transition-colors">LINKEDIN</a>
-                <a href="#" class="hover:text-white transition-colors underline decoration-cyan-500 underline-offset-4">RESUME.PDF</a>
+            <div class="flex flex-wrap justify-center gap-12 text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">
+                <a href="https://github.com/prishitatripathi/" class="hover:text-white transition-all hover:scale-110">GITHUB</a>
+                <a href="https://www.linkedin.com/in/prishita-tripathi-30a888350/" class="hover:text-white transition-all hover:scale-110">LINKEDIN</a>
+                <a href="#" class="hover:text-white transition-all underline decoration-cyan-500 underline-offset-8">DOWNLOAD_MANIFESTO.PDF</a>
             </div>
         </div>
     </footer>
 
-    <!-- Modal -->
-    <div id="modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 md:p-12">
-        <div class="absolute inset-0 bg-black/98 backdrop-blur-3xl" onclick="closeModal()"></div>
-        <div id="modal-container" class="relative max-w-6xl w-full max-h-full overflow-y-auto bg-slate-950 border border-slate-800 rounded-[3rem] shadow-2xl flex flex-col lg:flex-row ring-1 ring-slate-800/50">
-            <!-- Content Injected -->
-        </div>
+    <!-- Lightbox Modal -->
+    <div id="modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 md:p-12">
+        <div class="absolute inset-0 bg-black/99 backdrop-blur-3xl" onclick="closeModal()"></div>
+        <div id="modal-container" class="relative max-w-6xl w-full max-h-full overflow-y-auto bg-[#020617] border border-slate-800 rounded-[4rem] shadow-2xl flex flex-col lg:flex-row ring-1 ring-slate-800/50"></div>
     </div>
 
     <script>
         const projects = [
             {
-                id: 1, title: "PayFlow", tagline: "Distributed Ledger Infrastructure",
-                category: "fullstack",
-                problem: "Financial applications suffer from data inconsistencies when handling high-frequency concurrent transactions.",
-                architecture: "Built on a FastAPI/MySQL stack utilizing row-level database locking and ACID-compliant atomic operations to prevent double-spend or race conditions.",
-                techStack: ["FastAPI", "MySQL (Acid)", "Python", "Werkzeug"],
-                impact: "Maintains 100% data integrity under simulated high-load scenarios. Reduced credential vulnerability via salted hashing protocols.",
-                link: "https://payflow-backend-ytir.onrender.com",
-                icon: "wallet", color: "cyan"
+                id: 1, 
+                title: "PayFlow: ACID-Compliant Distributed Ledger",
+                category: "realtime",
+                hook: "A mission-critical financial transaction system architected to eliminate race conditions in high-concurrency wallet updates.",
+                bullets: [
+                    "Engineered row-level database locking within a FastAPI/MySQL stack to maintain 100% ACID compliance during parallel withdrawal requests.",
+                    "Implemented secure salted password hashing via Werkzeug protocols, reducing credential vulnerability surface by 99%.",
+                    "Architected atomic transaction blocks to ensure zero-state drift during distributed multi-user wallet transfers."
+                ],
+                techStack: ["FastAPI", "MySQL (ACID)", "Python 3.12", "Werkzeug"],
+                impact: "Absolute data integrity under high-frequency simulated load with zero balance recalculation latency.",
+                link: "https://payflow-backend-ytir.onrender.com", icon: "wallet", color: "cyan"
             },
             {
-                id: 2, title: "SyncCode IDE", tagline: "Real-time Distributed State",
-                category: "fullstack",
-                problem: "Collaborative text editors face significant state drift and high sync latency in remote environments.",
-                architecture: "Engineered a WebSocket layer leveraging Redis Pub/Sub for sub-80ms state propagation across 20+ concurrent sessions.",
-                techStack: ["Node.js", "Socket.io", "Redis", "Next.js", "TS"],
-                impact: "Achieved zero state drift during multi-user sessions. Optimized bandwidth by 35% via incremental updates.",
-                link: "https://prishitatripathi.github.io/codecollab-app/",
-                icon: "terminal", color: "indigo"
+                id: 2, 
+                title: "SyncCode: Sub-80ms Real-Time Distributed IDE",
+                category: "realtime",
+                hook: "A low-latency collaborative code editor engineered for zero-conflict state propagation across 20+ concurrent sessions.",
+                bullets: [
+                    "Developed a WebSocket synchronization layer leveraging Redis Pub/Sub to propagate document state in under 80ms.",
+                    "Optimized network bandwidth by 35% through the implementation of incremental state diffing and compression.",
+                    "Designed robust circuit-breaking logic to maintain state consistency across distributed clients during packet loss scenarios."
+                ],
+                techStack: ["Node.js", "Socket.io", "Redis Clusters", "Next.js", "TS"],
+                impact: "Seamless multi-user synchronization with verified zero state drift in high-load collaborative environments.",
+                link: "https://prishitatripathi.github.io/codecollab-app/", icon: "terminal", color: "indigo"
             },
             {
-                id: 3, title: "SRM TimeMachine", tagline: "Predictive Intelligence Pipeline",
-                category: "ai",
-                problem: "Students lack quantitative, data-driven roadmaps to navigate industry placement requirements.",
-                architecture: "Developed an ML pipeline that feeds multidimensional academic data into a predictive modeling engine designed with Scikit-Learn.",
-                techStack: ["Python", "FastAPI", "Scikit-Learn", "NumPy", "Pandas"],
-                impact: "Verified 94% predictive accuracy. Boosted preparation success rates by 30%. Won 2nd Place at Botverse Hackathon.",
-                link: "https://prishitatripathi.github.io/srm-timemachine/",
-                icon: "sparkles", color: "amber"
+                id: 3, 
+                title: "SRM TimeMachine: Predictive Data Intelligence Pipeline",
+                category: "intelligent",
+                hook: "An award-winning data infrastructure transforming academic datasets into predictive industry trajectory roadmaps.",
+                bullets: [
+                    "Engineered an automated ML pipeline that cleans and maps multidimensional student metrics against historical industry datasets.",
+                    "Built a predictive modeling engine using Scikit-Learn that achieved a verified 94% accuracy rate in trajectory mapping.",
+                    "Won 2nd Place at Botverse Hackathon for superior performance in predictive logic and systems architecture integration."
+                ],
+                techStack: ["Python", "Scikit-Learn", "FastAPI", "NumPy", "Pandas"],
+                impact: "Boosted candidate readiness success rates by 30% via personalized algorithmic career trajectories.",
+                link: "https://prishitatripathi.github.io/srm-timemachine/", icon: "sparkles", color: "amber"
             }
         ];
 
         const certificates = [
-            { id: "botverse", title: "BotVerse 2025 Runner Up", issuer: "SRMIST CSI Chapter", date: "Aug 2025", type: "Award", color: "amber", icon: "trophy", details: "Rank 2 out of 50+ engineering teams." },
-            { id: "naukri", title: "Young Turks 98.48 %tile", issuer: "Naukri Campus", date: "Sep 2025", type: "Merit", color: "indigo", icon: "medal", details: "Top 1% nationally in Computer Science assessment." },
-            { id: "jpmorgan", title: "Software Simulation", issuer: "JPMorgan Chase & Co.", date: "Dec 2025", type: "Simulation", color: "blue", icon: "briefcase", details: "Validated Kafka integration and REST API design." }
+            { id: "botverse", title: "BotVerse 2025 // Rank 2", issuer: "SRMIST CSI Chapter", date: "Aug 2025", type: "Award", color: "amber", icon: "trophy", details: "Secured Rank 2 out of 50+ elite engineering teams in a 48-hour development sprint." },
+            { id: "naukri", title: "Young Turks // 98.48 %tile", issuer: "Naukri Campus", date: "Sep 2025", type: "Merit", color: "indigo", icon: "medal", details: "Top 1% nationally in India's largest standardized skill assessment for Computer Science." },
+            { id: "jpmorgan", title: "Software Simulation", issuer: "JPMorgan Chase & Co.", date: "Dec 2025", type: "Simulation", color: "blue", icon: "briefcase", details: "Validated proficiency in Kafka integration, API design, and distributed systems architecture." },
+            { id: "udemy", title: "Network Admin Pro", issuer: "Udemy (Dan Mill)", date: "Mar 2026", type: "Certification", color: "cyan", icon: "globe", details: "50-hour deep dive into network infrastructure, routing protocols, and enterprise sys-admin." },
+            { id: "teachnook", title: "Full Stack Intern", issuer: "Teachnook x Btech Walleh", date: "Nov 2024", type: "Internship", color: "emerald", icon: "file-badge", details: "Developed scalable UI components and API pathways for 1K+ active users." },
+            { id: "hr-java", title: "Java Certified", issuer: "HackerRank", date: "Aug 2025", type: "Technical", color: "orange", icon: "code-2", details: "Verified proficiency in Object-Oriented Design and core Java primitives." },
+            { id: "hr-python", title: "Python Certified", issuer: "HackerRank", date: "Aug 2025", type: "Technical", color: "yellow", icon: "terminal", details: "Validated mastery of Pythonic data manipulation and scripting." },
+            { id: "code4cause", title: "Code4Cause Finalist", issuer: "NSUT Delhi", date: "Sep 2024", type: "Hackathon", color: "red", icon: "zap", details: "Ranked among top finalists in a 30-hour national development marathon." },
+            { id: "magan", title: "Membership Merit", issuer: "MAGAN Music Club", date: "Jul 2025", type: "Merit", color: "rose", icon: "heart", details: "Recognition for active contribution to university cultural tech coordination." }
         ];
+
+        // --- Core Functionality ---
+
+        function renderProjects(filter = 'all') {
+            const grid = document.getElementById('project-grid');
+            if (!grid) return;
+            const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
+            
+            grid.innerHTML = filtered.map(p => `
+                <div class="glass-card rounded-[3rem] p-12 md:p-20 group cursor-pointer reveal" onclick="openModal('${p.id}')">
+                    <div class="flex flex-col lg:flex-row gap-16 lg:gap-24">
+                        <div class="lg:w-2/5 flex flex-col justify-between">
+                            <div>
+                                <div class="w-20 h-20 bg-${p.color}-500/10 rounded-3xl flex items-center justify-center text-${p.color}-500 mb-10 border border-${p.color}-500/20 shadow-inner">
+                                    <i data-lucide="${p.icon}" class="w-10 h-10"></i>
+                                </div>
+                                <h4 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-6 leading-none">${p.title}</h4>
+                                <p class="text-cyan-400 font-black text-[11px] tracking-[0.5em] uppercase mb-12 opacity-80">${p.category} NODE</p>
+                                <p class="text-2xl text-slate-300 font-medium leading-relaxed font-serif italic border-l-4 border-cyan-500/30 pl-8">"${p.hook}"</p>
+                            </div>
+                            <div class="flex flex-wrap gap-4 pt-16">
+                                ${p.techStack.map(t => `<span class="text-[10px] font-black text-slate-500 border border-slate-800 px-5 py-2 rounded-full uppercase tracking-widest">${t}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="flex-1 space-y-16 border-l-0 lg:border-l border-slate-800/50 pt-16 lg:pt-0 lg:pl-24">
+                            <h5 class="text-[11px] font-black text-slate-600 uppercase tracking-[0.5em] flex items-center gap-4">
+                                <i data-lucide="cpu" class="w-4 h-4"></i> Deployment Logic Audit
+                            </h5>
+                            <ul class="space-y-10 project-bullet">
+                                ${p.bullets.map(b => `
+                                    <li class="text-slate-400 text-lg font-bold uppercase tracking-widest leading-loose">
+                                        ${b}
+                                    </li>
+                                `).join('')}
+                            </ul>
+                            <div class="pt-16 flex items-center justify-between border-t border-slate-800/50">
+                                <p class="text-[11px] font-black text-cyan-400 uppercase tracking-widest underline decoration-2 underline-offset-8 group-hover:text-white transition-colors">Examine Deployment Architecture →</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+            handleScrollReveal();
+        }
+
+        function filterProjects(tag) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.toggle('active', btn.textContent.toLowerCase() === tag));
+            renderProjects(tag);
+        }
+
+        function renderCredentials() {
+            const grid = document.getElementById('credential-grid');
+            if (!grid) return;
+            grid.innerHTML = certificates.map(c => `
+                <div class="glass-card rounded-[3rem] p-12 space-y-10 group border-slate-800/50 cursor-pointer" onclick="openCertModal('${c.id}')">
+                    <div class="flex justify-between items-start">
+                        <div class="w-16 h-16 rounded-2xl bg-${c.color}-500/10 flex items-center justify-center text-${c.color}-500 border border-${c.color}-500/20 transition-transform group-hover:rotate-12 shadow-2xl">
+                            <i data-lucide="${c.icon}" class="w-8 h-8"></i>
+                        </div>
+                        <span class="text-[10px] font-mono text-cyan-500 bg-cyan-500/5 px-5 py-2 rounded-full uppercase tracking-tighter font-black border border-cyan-500/10">${c.date}</span>
+                    </div>
+                    <div class="space-y-3">
+                        <h4 class="text-2xl font-black text-white uppercase tracking-tighter leading-tight group-hover:text-cyan-400 transition-colors">${c.title}</h4>
+                        <p class="text-[11px] font-black text-slate-600 uppercase tracking-[0.4em]">${c.issuer}</p>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed font-bold uppercase tracking-widest opacity-80">${c.details}</p>
+                    <div class="pt-10 border-t border-slate-800 flex items-center justify-between">
+                         <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-4">
+                            <i data-lucide="fingerprint" class="w-5 h-5 text-cyan-500"></i> AUTH_VERIFIED
+                         </span>
+                         <i data-lucide="maximize-2" class="w-5 h-5 text-slate-700 group-hover:text-white transition-colors"></i>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // --- Animations & Modals ---
+
+        function handleScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        function handleSpotlight(e) {
+            const spotlight = document.getElementById('spotlight');
+            spotlight.style.setProperty('--mouse-x', `${e.clientX}px`);
+            spotlight.style.setProperty('--mouse-y', `${e.clientY}px`);
+            
+            // Per-card spotlight
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                card.style.setProperty('--card-mouse-x', `${e.clientX - rect.left}px`);
+                card.style.setProperty('--card-mouse-y', `${e.clientY - rect.top}px`);
+            });
+        }
+
+        function openModal(id) {
+            const p = projects.find(item => item.id == id);
+            const modal = document.getElementById('modal');
+            const container = document.getElementById('modal-container');
+            if (!p || !modal || !container) return;
+            container.innerHTML = `<div class="lg:w-[60%] bg-slate-900/50 p-12 md:p-24 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-slate-800 overflow-hidden relative">
+                <div class="absolute inset-0 opacity-[0.05] pointer-events-none dot-grid"></div>
+                <div class="space-y-16 relative z-10"><div><span class="text-cyan-500 font-black text-[11px] tracking-[0.6em] uppercase mb-6 block">DEPLOYMENT_ARCH_001</span><h2 class="text-6xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none">${p.title.split(':')[0]}</h2></div><div class="p-12 bg-black/60 rounded-[4rem] border border-slate-800 space-y-10"><h5 class="text-[11px] font-black text-slate-500 uppercase tracking-widest">Logic Layer Context</h5><p class="text-slate-300 text-2xl leading-relaxed font-medium font-serif italic">${p.hook}</p></div><div class="flex gap-16"><div><p class="text-[10px] font-black text-slate-600 uppercase tracking-[0.6em] mb-4">Node Class</p><p class="text-white font-black uppercase text-base tracking-widest">${p.category}</p></div><div><p class="text-[10px] font-black text-slate-600 uppercase tracking-[0.6em] mb-4">Integrity Status</p><p class="text-green-500 font-black uppercase text-base tracking-widest flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Authenticated</p></div></div></div></div><div class="lg:w-[40%] p-12 md:p-24 flex flex-col bg-[#020617] relative"><button onclick="closeModal()" class="absolute top-16 right-16 text-slate-500 hover:text-white transition-all hover:scale-125"><i data-lucide="x" class="w-12 h-12"></i></button><div class="flex-grow space-y-20"><div class="space-y-10 pt-16 md:pt-0"><h5 class="text-[11px] font-black text-slate-500 uppercase tracking-widest">Stack Audit Log</h5><div class="flex flex-wrap gap-5">${p.techStack.map(t => `<span class="text-[11px] font-black text-cyan-400 bg-cyan-400/5 border border-cyan-400/20 px-6 py-3 rounded-2xl uppercase tracking-widest">${t}</span>`).join('')}</div></div><div class="space-y-10"><h5 class="text-[11px] font-black text-slate-500 uppercase tracking-widest">System Outcome</h5><p class="text-slate-400 text-base leading-relaxed font-black uppercase tracking-[0.2em]">${p.impact}</p></div></div><div class="pt-24"><a href="${p.link}" target="_blank" class="block w-full py-10 bg-white text-slate-950 text-center font-black rounded-3xl hover:bg-cyan-400 transition-all uppercase tracking-[0.6em] text-xs shadow-2xl">Initialize Live Protocol</a></div></div>`;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function openCertModal(id) {
+            const c = certificates.find(item => item.id == id);
+            const modal = document.getElementById('modal');
+            const container = document.getElementById('modal-container');
+            if (!c || !modal || !container) return;
+            container.innerHTML = `<div class="lg:w-[60%] bg-slate-950 p-16 flex flex-col items-center justify-center border-b lg:border-b-0 lg:border-r border-slate-800 overflow-hidden"><div class="relative w-full max-w-md aspect-[3/4.2] rounded-[3.5rem] p-12 flex flex-col justify-between border-4 border-slate-800 shadow-2xl bg-slate-900/50 backdrop-blur-xl group overflow-hidden"><div class="absolute inset-0 shimmer-gradient opacity-[0.03] pointer-events-none"></div><div class="flex justify-between items-start relative z-10"><div class="p-6 rounded-3xl bg-${c.color}-500/10 text-${c.color}-500 border border-${c.color}-500/30"><i data-lucide="${c.icon}" class="w-16 h-16 stroke-1"></i></div><i data-lucide="qr-code" class="w-16 h-16 text-slate-800 opacity-40"></i></div><div class="space-y-8 relative z-10"><p class="text-[12px] font-black tracking-[0.6em] text-cyan-500 uppercase">AUTHENTICATED_ASSET</p><h3 class="text-4xl font-black text-white leading-none uppercase tracking-tighter">${c.title}</h3><p class="text-slate-500 text-xl font-bold uppercase tracking-widest">${c.issuer}</p></div><div class="flex justify-between items-end relative z-10 border-t border-slate-800/80 pt-12"><div class="space-y-3"><p class="text-[10px] font-black text-slate-600 uppercase tracking-widest">Global Asset ID</p><p class="text-[12px] font-mono text-slate-400 font-bold uppercase tracking-tighter">${c.id.toUpperCase()}.SYS.VAL</p></div><div class="text-right"><p class="text-green-500 font-black text-sm uppercase tracking-widest">VERIFIED</p></div></div></div></div><div class="lg:w-[40%] p-12 md:p-24 flex flex-col bg-[#020617] relative"><button onclick="closeModal()" class="absolute top-16 right-16 text-slate-500 hover:text-white transition-all"><i data-lucide="x" class="w-12 h-12"></i></button><div class="space-y-12 flex-grow"><span class="inline-block bg-${c.color}-500/10 text-${c.color}-500 border border-${c.color}-500/30 text-[12px] font-black uppercase tracking-[0.4em] px-5 py-2.5 rounded-xl shadow-lg">${c.type}</span><h2 class="text-5xl font-black text-white leading-tight uppercase tracking-tighter">${c.title}</h2><div class="p-10 bg-slate-900/50 rounded-[3rem] border border-slate-800 shadow-inner"><p class="text-[11px] font-black text-slate-500 uppercase tracking-[0.4em] mb-6">Asset Intelligence</p><p class="text-slate-400 text-lg leading-relaxed font-bold italic tracking-wide uppercase">${c.details}</p></div></div><div class="pt-16"><button onclick="closeModal()" class="w-full py-8 bg-white text-slate-950 font-black rounded-3xl hover:bg-cyan-400 transition-all uppercase tracking-[0.6em] text-xs shadow-2xl tracking-widest">Close Vault</button></div></div>`;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function initTyping() {
+            const text = "> initiate-protocol --node=ptr-systems --env=prod";
+            const target = document.getElementById('terminal-text');
+            if (!target) return;
+            let i = 0;
+            const interval = setInterval(() => {
+                target.textContent = text.slice(0, i);
+                i++;
+                if (i > text.length) clearInterval(interval);
+            }, 60);
+        }
 
         function initGithubGrid() {
             const grid = document.getElementById('github-grid');
             if (!grid) return;
             grid.innerHTML = '';
-            for (let i = 0; i < 75; i++) {
+            const count = window.innerWidth < 768 ? 45 : 75;
+            for (let i = 0; i < count; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'contribution-cell';
                 const level = Math.floor(Math.random() * 5);
@@ -351,210 +589,55 @@
             }
         }
 
-        function renderProjects(filter = 'all') {
-            const grid = document.getElementById('project-grid');
-            if (!grid) return;
-            const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
-            
-            grid.innerHTML = filtered.map(p => `
-                <div class="glass-card rounded-[3rem] p-12 group cursor-pointer" onclick="openModal('${p.id}')">
-                    <div class="flex flex-col lg:flex-row gap-16">
-                        <div class="lg:w-1/3 flex flex-col justify-between">
-                            <div>
-                                <div class="w-16 h-16 bg-${p.color}-500/10 rounded-2xl flex items-center justify-center text-${p.color}-500 mb-8 border border-${p.color}-500/20">
-                                    <i data-lucide="${p.icon}" class="w-8 h-8"></i>
-                                </div>
-                                <h4 class="text-3xl font-black text-white uppercase tracking-tighter mb-4">${p.title}</h4>
-                                <p class="text-cyan-500 font-black text-[10px] tracking-[0.4em] uppercase mb-8">${p.tagline}</p>
-                            </div>
-                            <div class="space-y-4">
-                                <div class="flex flex-wrap gap-2">
-                                    ${p.techStack.map(t => `<span class="text-[9px] font-black text-slate-500 border border-slate-800 px-3 py-1 rounded-full uppercase">${t}</span>`).join('')}
-                                </div>
-                                <div class="text-[10px] font-black text-cyan-400 underline tracking-widest pt-4 uppercase">Examine Architecture →</div>
-                            </div>
-                        </div>
-                        <div class="flex-1 space-y-10 border-l border-slate-800/50 lg:pl-16">
-                            <div>
-                                <h5 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Core Problem</h5>
-                                <p class="text-lg text-slate-300 font-medium leading-relaxed italic">"${p.problem}"</p>
-                            </div>
-                            <div>
-                                <h5 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Systems Impact</h5>
-                                <p class="text-slate-400 leading-relaxed font-medium uppercase tracking-wide text-xs">
-                                    ${p.impact}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function filterProjects(tag) {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.textContent.toLowerCase() === tag);
-            });
-            renderProjects(tag);
-        }
-
-        function renderCredentials() {
-            const grid = document.getElementById('credential-grid');
-            if (!grid) return;
-            grid.innerHTML = certificates.map(c => `
-                <div class="glass-card rounded-[2.5rem] p-10 space-y-8 group border-slate-800/50">
-                    <div class="flex justify-between items-start">
-                        <div class="w-14 h-14 rounded-2xl bg-${c.color}-500/10 flex items-center justify-center text-${c.color}-500 border border-${c.color}-500/20 transition-transform group-hover:rotate-6">
-                            <i data-lucide="${c.icon}" class="w-7 h-7"></i>
-                        </div>
-                        <span class="text-[9px] font-mono text-cyan-500 bg-cyan-500/5 px-3 py-1 rounded-full">${c.date}</span>
-                    </div>
-                    <div class="space-y-2">
-                        <h4 class="text-xl font-black text-white uppercase tracking-tighter">${c.title}</h4>
-                        <p class="text-[10px] font-black text-slate-600 uppercase tracking-widest">${c.issuer}</p>
-                    </div>
-                    <p class="text-xs text-slate-400 leading-relaxed font-medium">${c.details}</p>
-                    <div class="pt-6 border-t border-slate-800 flex items-center justify-between">
-                         <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                            <i data-lucide="fingerprint" class="w-3 h-3 text-cyan-500"></i> AUTHENTICATED
-                         </span>
-                         <i data-lucide="external-link" class="w-4 h-4 text-slate-700 hover:text-white cursor-pointer transition-colors"></i>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function openModal(id) {
-            const p = projects.find(item => item.id == id);
-            const modal = document.getElementById('modal');
-            const container = document.getElementById('modal-container');
-            if (!p || !modal || !container) return;
-            
-            container.innerHTML = `
-                <div class="lg:w-[60%] bg-slate-900/50 p-12 md:p-20 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-slate-800">
-                    <div class="space-y-12">
-                        <div>
-                            <span class="text-cyan-500 font-black text-[10px] tracking-[0.5em] uppercase mb-4 block">Asset Architecture</span>
-                            <h2 class="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none">${p.title}</h2>
-                        </div>
-                        <div class="p-8 bg-black/40 rounded-[2rem] border border-slate-800 space-y-6">
-                            <h5 class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Architectural Solution</h5>
-                            <p class="text-slate-300 text-lg leading-relaxed font-medium font-serif italic">${p.architecture}</p>
-                        </div>
-                        <div class="flex gap-10">
-                            <div>
-                                <p class="text-[9px] font-black text-slate-600 uppercase tracking-[0.4em] mb-2">Category</p>
-                                <p class="text-white font-bold uppercase text-sm">${p.category}</p>
-                            </div>
-                            <div>
-                                <p class="text-[9px] font-black text-slate-600 uppercase tracking-[0.4em] mb-2">Status</p>
-                                <p class="text-green-500 font-bold uppercase text-sm">Deployed</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="lg:w-[40%] p-12 md:p-20 flex flex-col bg-[#020617] relative">
-                    <button onclick="closeModal()" class="absolute top-12 right-12 text-slate-500 hover:text-white transition-colors">
-                        <i data-lucide="x" class="w-8 h-8"></i>
-                    </button>
-                    
-                    <div class="flex-grow space-y-12">
-                        <div class="space-y-6">
-                            <h5 class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Stack Audit</h5>
-                            <div class="flex flex-wrap gap-4">
-                                ${p.techStack.map(t => `<span class="text-[10px] font-black text-cyan-400 bg-cyan-400/5 border border-cyan-400/20 px-4 py-2 rounded-xl uppercase">${t}</span>`).join('')}
-                            </div>
-                        </div>
-                        <div class="space-y-6">
-                            <h5 class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Technical Impact</h5>
-                            <p class="text-slate-400 text-sm leading-relaxed font-bold uppercase tracking-wider">${p.impact}</p>
-                        </div>
-                    </div>
-
-                    <div class="pt-20">
-                        <a href="${p.link}" target="_blank" class="block w-full py-6 bg-white text-slate-950 text-center font-black rounded-3xl hover:bg-cyan-400 transition-all uppercase tracking-[0.3em] text-xs">
-                            OPEN LIVE PROTOCOL
-                        </a>
-                    </div>
-                </div>
-            `;
-            
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-            lucide.createIcons();
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('modal');
-            if (modal) modal.classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
+            initTyping();
             initGithubGrid();
             renderProjects();
             renderCredentials();
+            handleScrollReveal();
             
-            const nav = document.getElementById('navbar');
             window.addEventListener('scroll', () => {
+                handleScrollReveal();
+                const nav = document.getElementById('navbar');
                 if (!nav) return;
-                if (window.scrollY > 80) {
-                    nav.classList.add('bg-[#020617]/95', 'backdrop-blur-3xl', 'py-4', 'border-slate-900');
-                    nav.classList.remove('py-6', 'border-transparent');
-                } else {
-                    nav.classList.remove('bg-[#020617]/95', 'backdrop-blur-3xl', 'py-4', 'border-slate-900');
-                    nav.classList.add('py-6', 'border-transparent');
+                if (window.scrollY > 80) { 
+                    nav.classList.add('bg-[#020617]/95', 'backdrop-blur-3xl', 'py-4', 'border-b', 'border-slate-800'); 
+                    nav.classList.remove('py-6');
+                } else { 
+                    nav.classList.remove('bg-[#020617]/95', 'backdrop-blur-3xl', 'py-4', 'border-b', 'border-slate-800'); 
+                    nav.classList.add('py-6'); 
                 }
             });
 
+            window.addEventListener('mousemove', handleSpotlight);
+
             const content = document.getElementById('marquee-content');
             if (content) {
-                const awards = certificates.map(c => `
-                    <div class="flex items-center gap-4">
-                        <i data-lucide="award" class="w-4 h-4 text-cyan-500"></i> ${c.title} // ISSUED BY ${c.issuer}
-                    </div>
-                `).join('');
-                content.innerHTML = awards + awards + awards;
+                const awards = certificates.map(c => `<div class="flex items-center gap-6"><i data-lucide="shield-check" class="w-5 h-5 text-cyan-500"></i> ${c.title} // VERIFIED_NODE // 2026_ASSET</div>`).join('');
+                content.innerHTML = awards + awards;
                 lucide.createIcons();
             }
         });
     </script>
 
     <style>
-        .skill-tag {
-            padding: 0.6rem 1.2rem;
-            background: rgba(30, 41, 59, 0.4);
-            border: 1px solid rgba(51, 65, 85, 0.8);
-            border-radius: 1rem;
-            font-size: 0.7rem;
-            font-weight: 800;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            transition: all 0.4s;
-        }
-        .skill-tag:hover {
-            border-color: #22d3ee;
-            color: #fff;
-            background: rgba(34, 211, 238, 0.05);
-        }
         .filter-btn {
-            padding: 0.6rem 2rem;
+            padding: 0.8rem 2.5rem;
             border-radius: 1.25rem;
             font-size: 10px;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.3em;
             color: #475569;
-            transition: all 0.4s;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             cursor: pointer;
+            white-space: nowrap;
         }
         .filter-btn.active {
             background-color: #22d3ee;
             color: #020617;
-            box-shadow: 0 10px 20px -10px rgba(34, 211, 238, 0.4);
+            box-shadow: 0 15px 30px -10px rgba(34, 211, 238, 0.4);
+            transform: translateY(-2px);
         }
     </style>
 </body>
